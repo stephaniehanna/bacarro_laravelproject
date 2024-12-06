@@ -7,33 +7,50 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-
     public function store(Request $request)
     {
-        // Validate the requests
+        //Validate the request
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:students,email',
             'phone' => 'required',
             'address' => 'required',
-        ]);
 
+        ]);
+        
         // Use the validated data to create a student
         $student = Student::create($validated);
 
-        // Redirect back with success message
+        //Redirected back with success message
         return redirect()->route('dashboard')->with([
-            'success' => 'Students added successfully',
+            'success' => 'Student added successfully',
             'newStudent' => $student,
         ]);
-
     }
 
     public function destroy(Student $student)
     {
         $student->delete();
-        return redirect()->route('dashboard')->with('success', 'Student
-        deleted successfully');
+        return redirect()->route('dashboard')->with('deleted', 'Student deleted successfully');
     }
 
+    public function edit(Student $student)
+    {
+        return view('edit-student', compact('student'));
+    }
+
+    public function update(Request $request, Student $student)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:students,email,'. $student->id. ',id',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        $student->update($validated);
+
+        return redirect()->route('dashboard')->with('success', 'Student updated successfully');
+    }
+    
 }

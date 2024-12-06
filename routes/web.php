@@ -23,5 +23,9 @@ Route::middleware('auth')->group(function () {
 Route::post('/student/store', [StudentController::class, 'store']) -> name('student.store');
 Route::delete('/student/{student}', [StudentController::class, 'destroy']) -> name('student.destroy');
 
+Route::get('/student/{student}/edit' , [StudentController::class, 'edit'])->name('student.edit');
+Route::put('/student/{student}', [StudentController::class, 'update'])->name('student.update');
+
+
 
 require __DIR__.'/auth.php';
